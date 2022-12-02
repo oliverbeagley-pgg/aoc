@@ -16,7 +16,10 @@ aoc-submit = "aoc_utils:submit_solution"
 dev = [
     "black",
     "isort",
-    "mypy",
+    # Using git version as 0.991 does not support typing.Self properly.
+    # The next version should support it as it was merged the day after 0.991 was released
+    # Use MYPY_USE_MYPYC=1 when pip installing so it compiles with mypyc
+    "mypy @ git+https://github.com/python/mypy.git",
     "types-requests",
     "flake8",
 ]
@@ -26,6 +29,9 @@ dev = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.metadata]
+# So that git version works for mypy
+allow-direct-references = true
 
 [tool.black]
 line-length = 88

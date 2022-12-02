@@ -14,8 +14,8 @@ def compute(input: str) -> int:
     depth = 0
     aim = 0
     for command in plan:
-        direction, number = command.split()
-        number = int(number)
+        direction, number_s = command.split()
+        number = int(number_s)
 
         match direction:
             case "forward":

@@ -14,7 +14,7 @@ def compute(input: str) -> int:
         [sum(aoc_utils.parse_numbers(calorie)) for calorie in input.split("\n\n")]
     )
 
-    return sum(calories[:-3])
+    return sum(calories[-3:])
 
 
 TEST_INPUT = """

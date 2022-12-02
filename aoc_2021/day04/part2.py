@@ -52,6 +52,7 @@ def compute(input: str) -> int:
     for number in number_generator:
         for board_idx, board in enumerate(parsed_boards):
             board.remaining.discard(number)
+            score = -1
             if board_idx not in finished_boards and board.is_solved:
                 score = board.score(number)
                 finished_boards.add(board_idx)
