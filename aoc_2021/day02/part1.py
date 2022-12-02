@@ -13,8 +13,8 @@ def compute(input: str) -> int:
     horiztonal = 0
     depth = 0
     for command in plan:
-        direction, number = command.split()
-        number = int(number)
+        direction, number_s = command.split()
+        number = int(number_s)
 
         match direction:
             case "forward":

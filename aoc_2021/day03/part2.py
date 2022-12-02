@@ -2,7 +2,7 @@ import argparse
 import os
 from textwrap import dedent
 from typing import Any
-from typing import Callable
+from collections.abc import Callable
 
 import pytest
 
