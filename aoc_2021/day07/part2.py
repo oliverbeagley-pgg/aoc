@@ -1,5 +1,7 @@
 import argparse
+import math
 import os
+import statistics
 from textwrap import dedent
 
 import pytest
@@ -16,12 +18,14 @@ def triangle_number(n: int) -> int:
 def compute(input: str) -> int:
     positions = aoc_utils.parse_number_comma(input)
 
-    fuel_costs = (
-        sum(triangle_number(abs(position - destination)) for position in positions)
-        for destination in range(min(positions), max(positions) + 1)
+    mean = statistics.mean(positions)
+    rounded = math.floor(mean), math.ceil(mean)
+    fuel_costs = min(
+        sum(triangle_number(abs(position - mean)) for position in positions)
+        for mean in rounded
     )
 
-    return min(fuel_costs)
+    return fuel_costs
 
 
 TEST_INPUT = """

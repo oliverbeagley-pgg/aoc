@@ -1,5 +1,6 @@
 import argparse
 import os
+import statistics
 from textwrap import dedent
 
 import pytest
@@ -12,12 +13,11 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), "input.txt")
 def compute(input: str) -> int:
     positions = aoc_utils.parse_number_comma(input)
 
-    fuel_costs = (
-        sum(abs(position - destination) for position in positions)
-        for destination in range(min(positions), max(positions) + 1)
-    )
+    median = round(statistics.median(positions))
 
-    return min(fuel_costs)
+    fuel_costs = sum(abs(position - median) for position in positions)
+
+    return fuel_costs
 
 
 TEST_INPUT = """
