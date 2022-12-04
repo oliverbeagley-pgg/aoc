@@ -1,5 +1,6 @@
 import argparse
 import os
+import re
 
 import requests
 
@@ -63,6 +64,11 @@ def send_answer(year: int, day: int, part: int, answer: int) -> str:
     return response.content.decode()
 
 
+WRONG = re.compile(r"That's not the right answer.*?\.")
+RIGHT = "That's the right answer!"
+ALREADY_DONE = re.compile(r"You don't seem to be solving.*\?")
+
+
 def submit_solution() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--part", type=int, required=True)
@@ -73,9 +79,20 @@ def submit_solution() -> int:
     year, day = get_year_day()
     contents = send_answer(year, day, args.part, args.answer)
 
-    print(contents)
+    if RIGHT in contents:
+        print(RIGHT)
+        raise SystemExit(0)
 
-    raise SystemExit(0)
+    for error in (WRONG, ALREADY_DONE):
+
+        match = error.search(contents)
+        if match:
+            print(match[0])
+            raise SystemExit(1)
+
+    print("Unhandled response")
+    print(contents)
+    raise SystemExit(1)
 
 
 def parse_numbers(s: str) -> list[int]:
