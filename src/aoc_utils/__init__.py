@@ -67,6 +67,7 @@ def send_answer(year: int, day: int, part: int, answer: int) -> str:
 WRONG = re.compile(r"That's not the right answer.*?\.")
 RIGHT = "That's the right answer!"
 ALREADY_DONE = re.compile(r"You don't seem to be solving.*\?")
+TOO_RECENT = re.compile(r"You gave an answer too recently.*left to wait\.")
 
 
 def submit_solution() -> int:
@@ -83,7 +84,7 @@ def submit_solution() -> int:
         print(RIGHT)
         raise SystemExit(0)
 
-    for error in (WRONG, ALREADY_DONE):
+    for error in (WRONG, ALREADY_DONE, TOO_RECENT):
 
         match = error.search(contents)
         if match:
@@ -97,3 +98,7 @@ def submit_solution() -> int:
 
 def parse_numbers(s: str) -> list[int]:
     return [int(x) for x in s.split()]
+
+
+def parse_number_comma(s: str) -> list[int]:
+    return [int(x) for x in s.split(",")]
