@@ -1,14 +1,10 @@
 import argparse
 import os
-from string import ascii_letters
 from textwrap import dedent
 
 import pytest
 
 INPUT_TXT = os.path.join(os.path.dirname(__file__), "input.txt")
-
-
-priority = {letter: priority for priority, letter in enumerate(ascii_letters, 1)}
 
 
 def compute(input: str) -> str:
