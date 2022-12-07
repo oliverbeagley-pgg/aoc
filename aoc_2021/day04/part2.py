@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import argparse
 import os
 from dataclasses import dataclass
 from textwrap import dedent
-from typing import Self
 
 import pytest
 
@@ -37,7 +38,7 @@ class BingoBoard:
             return False
 
     @classmethod
-    def parse(cls, input: str) -> Self:
+    def parse(cls, input: str) -> BingoBoard:
         board = aoc_utils.parse_numbers(input)
         return cls(board, set(board))
 
