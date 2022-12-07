@@ -12,7 +12,7 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), "input.txt")
 def compute(input: str) -> int:
     numbers = aoc_utils.parse_numbers(input)
 
-    return 1
+    return sum(numbers)
 
 
 TEST_INPUT = """

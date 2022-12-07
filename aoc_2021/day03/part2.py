@@ -1,8 +1,8 @@
 import argparse
 import os
+from collections.abc import Callable
 from textwrap import dedent
 from typing import Any
-from collections.abc import Callable
 
 import pytest
 
