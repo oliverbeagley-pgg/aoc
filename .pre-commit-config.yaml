@@ -10,6 +10,11 @@ repos:
       - id: check-added-large-files
       - id: mixed-line-ending
         args: ["--fix", "lf"]
+  - repo: "https://github.com/asottile/pyupgrade"
+    rev: v3.3.0
+    hooks:
+      - id: pyupgrade
+        args: ["--py311-plus"]
   - repo: "https://github.com/psf/black"
     rev: 22.10.0
     hooks:
@@ -25,11 +30,6 @@ repos:
         additional_dependencies:
           - types-requests==2.28.11.5
           - pytest==7.2.0
-  - repo: "https://github.com/asottile/pyupgrade"
-    rev: v3.3.0
-    hooks:
-      - id: pyupgrade
-        args: ["--py311-plus"]
   - repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
     hooks:
