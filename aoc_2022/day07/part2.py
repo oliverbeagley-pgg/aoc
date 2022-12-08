@@ -22,7 +22,8 @@ class Directory:
         self.children[name] = Directory(name=name, parent=self)
 
     def cd(self, name: str) -> Directory:
-        if name == ".." and self.parent is not None:
+        if name == "..":
+            assert self.parent is not None
             pwd = self.parent
         else:
             pwd = self.children[name]
@@ -55,10 +56,8 @@ def parse_stdin(stdin: list[str]) -> Directory:
 
             if cmd[0] == "cd":
                 pwd = root_directory if cmd[1] == "/" else pwd.cd(cmd[1])
-            elif cmd[0] == "ls":
-                pass
             else:
-                raise AssertionError(f"Unhandled {cmd=}")
+                continue
 
         else:
             start, end = line.split()
