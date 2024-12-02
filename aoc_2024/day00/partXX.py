@@ -1,29 +1,30 @@
+# noqa: N999
 import argparse
-import os
-from textwrap import dedent
+from pathlib import Path
 
 import pytest
 
 import aoc_utils
 
-INPUT_TXT = os.path.join(os.path.dirname(__file__), "input.txt")
+INPUT_TXT = Path(__file__).parent / "input.txt"
 
 
-def compute(input: str) -> int:
-    numbers = aoc_utils.parse_numbers(input)
+def compute(puzzle_input: str) -> int:
+    numbers = aoc_utils.parse_numbers(puzzle_input)
 
     return sum(numbers)
 
 
-TEST_INPUT = """
-    1
+TEST_INPUT = """\
+1
 """
-TEST_INPUT = dedent(TEST_INPUT).strip()
 
 
 @pytest.mark.parametrize(
     ("input_s", "expected"),
-    ((TEST_INPUT, 7),),
+    [
+        (TEST_INPUT, 7),
+    ],
 )
 def test(input_s: str, expected: int) -> None:
     assert compute(input_s) == expected
