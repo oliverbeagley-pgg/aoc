@@ -6,14 +6,14 @@ import pytest
 INPUT_TXT = Path(__file__).parent / "input.txt"
 
 
-def compute(input: str) -> int:
-    numbers = [[int(x) for x in line.split()] for line in input.splitlines()]
+def compute(puzzle_input: str) -> int:
+    numbers = [[int(x) for x in line.split()] for line in puzzle_input.splitlines()]
 
-    left, right = zip(*numbers, strict=True)
-    left = sorted(left)
-    right = sorted(right)
+    left_, right_ = zip(*numbers, strict=True)
+    left = sorted(left_)
+    right = sorted(right_)
 
-    return sum(abs(l - r) for l, r in zip(left, right, strict=True))
+    return sum(abs(l - r) for l, r in zip(left, right, strict=True))  # noqa: E741
 
 
 TEST_INPUT = """\
