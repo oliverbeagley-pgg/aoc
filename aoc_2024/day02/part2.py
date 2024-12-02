@@ -10,7 +10,11 @@ INPUT_TXT = Path(__file__).parent / "input.txt"
 def compute(puzzle_input: str) -> int:
     reports = [[int(x) for x in line.split()] for line in puzzle_input.splitlines()]
 
-    outcomes = [is_safe(report) for report in reports]
+    outcomes = [
+        is_safe(report)
+        or any(is_safe(report[:idx] + report[idx + 1 :]) for idx in range(len(report)))
+        for report in reports
+    ]
 
     return sum(1 for outcome in outcomes if outcome)
 
@@ -23,6 +27,7 @@ def is_safe(report: list[int]) -> bool:
     upper_bound = 3
 
     outcome = False
+
     for left, right in pairwise(report):
         diff = right - left
 
@@ -47,7 +52,7 @@ TEST_INPUT = """\
 @pytest.mark.parametrize(
     ("input_s", "expected"),
     [
-        (TEST_INPUT, 2),
+        (TEST_INPUT, 4),
     ],
 )
 def test(input_s: str, expected: int) -> None:
