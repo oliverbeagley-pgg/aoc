@@ -1,7 +1,7 @@
 [project]
 name = "aoc-utils"
 version = "0.0.1"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = [
     "pytest",
     "requests",
@@ -14,14 +14,9 @@ aoc-submit = "aoc_utils:submit_solution"
 
 [project.optional-dependencies]
 dev = [
-    "black",
-    "isort",
-    # Using git version as 0.991 does not support typing.Self properly.
-    # The next version should support it as it was merged the day after 0.991 was released
-    # Use MYPY_USE_MYPYC=1 when pip installing so it compiles with mypyc
-    "mypy @ git+https://github.com/python/mypy.git",
+    "mypy",
+    "ruff",
     "types-requests",
-    "flake8",
 ]
 
 
@@ -29,17 +24,45 @@ dev = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.hatch.metadata]
-# So that git version works for mypy
-allow-direct-references = true
+[tool.ruff]
+src = ["src"]
+fix = true
+# cba changing old stuff
+exclude = [
+    "aoc_2021",
+    "aoc_2022",
+]
+force-exclude = true
 
-[tool.black]
-line-length = 88
-target-version = ['py311']
+[tool.ruff.lint]
+select = ["ALL"]
 
-[tool.isort]
-profile = "black"
-force_single_line = true
+ignore = [
+    'W191',   # This conflicts with ruff format
+    'E111',   # This conflicts with ruff format
+    'E114',   # This conflicts with ruff format
+    'E117',   # This conflicts with ruff format
+    'D206',   # This conflicts with ruff format
+    'D300',   # This conflicts with ruff format
+    'Q000',   # This conflicts with ruff format
+    'Q001',   # This conflicts with ruff format
+    'Q002',   # This conflicts with ruff format
+    'Q003',   # This conflicts with ruff format
+    'COM812', # This conflicts with ruff format
+    'COM819', # This conflicts with ruff format
+    'ISC001', # This conflicts with ruff format
+    "D",      # I don't care about docs
+    "S101",   # Use of assert if fine
+    "TD",     # Currently use some todos while refactoring
+    "FIX002", # Currently use some todos while refactoring
+    "PD010",  # Lots of false positives on non-pandas code
+    "PTH123", # open() is fine
+    "T201",   # prints are fine here
+]
+fixable = ["ALL"]
+
+[tool.ruff.lint.isort]
+force-single-line = true
 
 [tool.mypy]
 files = [
@@ -51,5 +74,5 @@ strict = true
 
 [tool.pytest.ini_options]
 pythonpath = [
-  "src"
+    "src",
 ]
