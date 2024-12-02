@@ -1,35 +1,36 @@
 import argparse
-import os
 import re
+from pathlib import Path
 
 import requests
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+HERE = Path(__file__).resolve().parent
 
 
 def _get_cookies() -> dict[str, str]:
-    with open(os.path.join(HERE, "../../.env")) as f:
+    with open(HERE.parent.parent / ".env") as f:
         return {"Cookie": f.read().strip()}
 
 
 def get_input(year: int, day: int) -> str:
     url = f"https://adventofcode.com/{year}/day/{day}/input"
-    request = requests.get(url, headers=_get_cookies())
+    request = requests.get(url, headers=_get_cookies(), timeout=60)
 
     return request.content.decode()
 
 
 def get_year_day() -> tuple[int, int]:
-    cwd = os.getcwd()
+    cwd = Path.cwd()
 
-    day = os.path.basename(cwd)
-    year = os.path.basename(os.path.dirname(cwd))
+    day = cwd.name
+    year = cwd.parent.name
 
     day_prefix = "day"
     aoc_prefix = "aoc_"
 
     if not day.startswith(day_prefix) or not year.startswith(aoc_prefix):
-        raise AssertionError(f"unexpected working dir: {cwd}")
+        msg = f"unexpected working dir: {cwd}"
+        raise AssertionError(msg)
 
     return int(year[len(aoc_prefix) :]), int(day[len(day_prefix) :])
 
@@ -38,13 +39,14 @@ def download_input() -> int:
     parser = argparse.ArgumentParser()
     parser.parse_args()
 
-    input = get_input(*get_year_day())
+    input_ = get_input(*get_year_day())
 
     with open("input.txt", "w") as f:
-        f.write(input)
+        f.write(input_)
 
-    lines = input.splitlines()
-    if len(lines) > 10:
+    lines = input_.splitlines()
+    long_lines = 10
+    if len(lines) > long_lines:
         for line in lines[:10]:
             print(line)
     else:
@@ -59,7 +61,7 @@ def send_answer(year: int, day: int, part: int, answer: int) -> str:
     url = f"https://adventofcode.com/{year}/day/{day}/answer"
     payload = {"level": part, "answer": answer}
 
-    response = requests.post(url=url, headers=_get_cookies(), data=payload)
+    response = requests.post(url=url, headers=_get_cookies(), data=payload, timeout=60)
 
     return response.content.decode()
 
@@ -85,7 +87,6 @@ def submit_solution() -> int:
         raise SystemExit(0)
 
     for error in (WRONG, ALREADY_DONE, TOO_RECENT):
-
         match = error.search(contents)
         if match:
             print(match[0])
