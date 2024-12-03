@@ -14,12 +14,10 @@ def compute(puzzle_input: str) -> int:
 
     matches: list[tuple[str, str, str]] = pattern.findall(puzzle_input)
 
-    matches_stack = list(reversed(matches))
-
     include = True
-    operations = []
-    while matches_stack:
-        match = matches_stack.pop()
+    operations: list[tuple[str, str]] = []
+
+    for match in matches:
         match match[0]:
             case "do":
                 include = True
