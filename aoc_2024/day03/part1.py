@@ -1,5 +1,6 @@
 import argparse
 import re
+from math import prod
 from pathlib import Path
 
 import pytest
@@ -12,9 +13,9 @@ INPUT_TXT = Path(__file__).parent / "input.txt"
 def compute(puzzle_input: str) -> int:
     pattern = re.compile(r"mul\((\d+),(\d+)\)")
 
-    matches: list[tuple[str, str]] = pattern.findall(puzzle_input)
-
-    return sum(int(a) * int(b) for a, b in matches)
+    return sum(
+        prod(map(int, match.groups())) for match in pattern.finditer(puzzle_input)
+    )
 
 
 TEST_INPUT = """\
