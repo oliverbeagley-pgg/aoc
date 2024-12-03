@@ -10,7 +10,7 @@ INPUT_TXT = Path(__file__).parent / "input.txt"
 
 
 def compute(puzzle_input: str) -> int:
-    pattern = re.compile(r"(do|don't)\(\)|mul\((\d+),(\d+)\)")
+    pattern = re.compile(r"(do(?:n't)?)\(\)|mul\((\d+),(\d+)\)")
 
     matches: list[tuple[str, str, str]] = pattern.findall(puzzle_input)
 
