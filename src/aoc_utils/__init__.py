@@ -1,10 +1,32 @@
 import argparse
 import re
+import sys
+import time
+from collections.abc import Generator
+from contextlib import contextmanager
 from pathlib import Path
 
 import requests
 
 HERE = Path(__file__).resolve().parent
+
+
+@contextmanager
+def timing() -> Generator[None]:
+    start = time.monotonic()
+    try:
+        yield
+    finally:
+        t = (time.monotonic() - start) * 1000
+
+        unit = "ms"
+
+        millisecond_limit = 100
+        if t < millisecond_limit:
+            t *= 1000
+            unit = "µs"
+
+        print(f"> {int(t)} {unit}", file=sys.stderr, flush=True)
 
 
 def _get_cookies() -> dict[str, str]:
