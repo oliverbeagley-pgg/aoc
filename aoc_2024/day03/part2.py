@@ -2,7 +2,6 @@ import argparse
 import re
 from math import prod
 from pathlib import Path
-from typing import cast
 
 import pytest
 
@@ -12,22 +11,13 @@ INPUT_TXT = Path(__file__).parent / "input.txt"
 
 
 def compute(puzzle_input: str) -> int:
-    pattern = re.compile(r"(do(?:n't)?)\(\)|mul\((\d+),(\d+)\)")
+    pattern = re.compile(r"mul\((\d+),(\d+)\)")
 
-    include = True
-    operations: list[tuple[str, str]] = []
-
-    for match in pattern.finditer(puzzle_input):
-        match match.group(1):
-            case "do":
-                include = True
-            case "don't":
-                include = False
-            case _:
-                if include:
-                    operations.append(cast(tuple[str, str], match.groups()[1:3]))
-
-    return sum(prod(map(int, pair)) for pair in operations)
+    return sum(
+        prod(map(int, match.groups()))
+        for do_split in puzzle_input.split("do()")
+        for match in pattern.finditer(do_split.split("don't()")[0])
+    )
 
 
 TEST_INPUT = """\
