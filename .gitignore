@@ -6,3 +6,5 @@ __pycache__
 
 .activate.sh
 .deactivate.sh
+
+input.txt
