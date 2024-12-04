@@ -27,10 +27,10 @@ def compute(puzzle_input: str) -> int:
         for col_idx, char in enumerate(line)
     }
 
-    mas = ("M", "A", "S")
+    mas = ("M", "S")
     sam = tuple(reversed(mas))
     massam = (mas, sam)
-    offsets = (-1, 0, 1)
+    offsets = (-1, 1)
 
     return sum(
         tuple(grid.get(coord + Point(offset, offset), "") for offset in offsets)
@@ -38,6 +38,7 @@ def compute(puzzle_input: str) -> int:
         and tuple(grid.get(coord + Point(offset, -offset), "") for offset in offsets)
         in massam
         for coord in grid
+        if grid[coord] == "A"
     )
 
 
