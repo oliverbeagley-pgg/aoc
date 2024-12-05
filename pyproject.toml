@@ -67,9 +67,13 @@ force-single-line = true
 [tool.mypy]
 files = [
     "src/",
+    "aoc_2024/",
 ]
 ignore_missing_imports = true
 strict = true
+mypy_path = [
+    "src",
+]
 
 
 [tool.pytest.ini_options]
