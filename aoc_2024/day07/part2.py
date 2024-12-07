@@ -1,10 +1,7 @@
 import argparse
 import heapq
-from collections.abc import Callable
-from operator import add
-from operator import mul
+from math import log10
 from pathlib import Path
-from typing import cast
 
 import pytest
 
@@ -23,29 +20,33 @@ def cat(a: int, b: int) -> int:
 
 
 def is_solvable(solution: int, numbers: list[int]) -> bool:
-    ops = cast(tuple[Callable[[int, int], int]], (add, mul, cat))
     # python uses a min-heap
-    queue = [(-solution, numbers)]
+    queue = [(solution, numbers)]
 
     while queue:
-        _, remaining_numbers = heapq.heappop(queue)
+        cost, (*others, end) = heapq.heappop(queue)
 
-        first, second, *others = remaining_numbers
+        if len(others) == 0:
+            if cost == end:
+                return True
+            continue
 
-        for op in ops:
-            new_answer = op(first, second)
-            new_numbers = [new_answer, *others]
+        if cost < 0:
+            continue
 
-            if (new_cost := new_answer - solution) > 0:
-                continue
+        # add
+        heapq.heappush(queue, (cost - end, others))
 
-            if len(new_numbers) == 1:
-                if new_answer == solution:
-                    return True
+        # multiply
+        q, r = divmod(cost, end)
+        if r == 0:
+            heapq.heappush(queue, (q, others))
 
-                continue
-
-            heapq.heappush(queue, (new_cost, new_numbers))
+        # concatenate
+        digits_end = int(log10(end)) + 1
+        q, r = divmod(cost - end, 10**digits_end)
+        if r == 0:
+            heapq.heappush(queue, (q, others))
 
     return False
 
