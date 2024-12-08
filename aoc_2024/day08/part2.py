@@ -19,13 +19,13 @@ def compute(puzzle_input: str) -> int:
     freqs = {*grid.values()}
     freqs.discard(".")
 
-    max_t = int(max(k.real for k in grid))
+    max_t = int(max(k.real for k in grid)) + 1
 
     antinodes = {
         a + (b - a) * t
-        for t in range(max_t)
         for freq in freqs
         for a, b in permutations((p for p in grid if grid[p] == freq), r=2)
+        for t in range(max_t)
     }
 
     return len(antinodes & set(grid))
