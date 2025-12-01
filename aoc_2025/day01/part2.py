@@ -25,13 +25,7 @@ def compute(puzzle_input: str) -> int:
 
         new_position = old_position + r
 
-        match (old_position, new_position):
-            case (0, _):
-                pass
-            case (_, x) if 0 < x < mod:
-                pass
-            case _:
-                zeros += 1
+        zeros += 0 if old_position == 0 or 0 < new_position < mod else 1
 
         new_position %= mod
 
