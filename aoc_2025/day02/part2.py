@@ -11,7 +11,7 @@ INPUT_TXT = Path(__file__).parent / "input.txt"
 @cache
 def factorise(n: int) -> list[int]:
     factors = [1]
-    for i in range(2, n // 2 + 1):
+    for i in range(2, int(n**0.5) + 1):
         if n % i == 0:
             factors.append(i)
             factors.append(n // i)
@@ -24,7 +24,8 @@ def is_bad_code(id_str: str) -> bool:
         return False
 
     return any(
-        len(set(batched(id_str, factor))) == 1 for factor in factorise(len(id_str))
+        len(set(batched(id_str, factor, strict=True))) == 1
+        for factor in factorise(len(id_str))
     )
 
 
