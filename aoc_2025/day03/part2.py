@@ -14,14 +14,12 @@ def best_jolt(bank: str, digits: int) -> str:
     if digits == 1:
         return max(bank)
 
-    largest_first_battery_idx = argmax(bank[: -digits + 1])
+    first_idx = argmax(bank[: -digits + 1])
 
-    largest_first_battery = bank[largest_first_battery_idx]
-    largest_second_battery = best_jolt(
-        bank[largest_first_battery_idx + 1 :], digits - 1
-    )
+    best_battery = bank[first_idx]
+    best_next_batteries = best_jolt(bank[first_idx + 1 :], digits - 1)
 
-    return f"{largest_first_battery}{largest_second_battery}"
+    return f"{best_battery}{best_next_batteries}"
 
 
 def compute(puzzle_input: str) -> int:

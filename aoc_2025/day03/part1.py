@@ -11,12 +11,12 @@ def argmax(bank: str) -> int:
 
 
 def best_jolt(bank: str) -> int:
-    largest_first_battery_idx = argmax(bank[:-1])
+    first_idx = argmax(bank[:-1])
 
-    largest_first_battery = bank[largest_first_battery_idx]
-    largest_second_battery = max(bank[largest_first_battery_idx + 1 :])
+    first_battery = bank[first_idx]
+    second_battery = max(bank[first_idx + 1 :])
 
-    return int(f"{largest_first_battery}{largest_second_battery}")
+    return int(f"{first_battery}{second_battery}")
 
 
 def compute(puzzle_input: str) -> int:
