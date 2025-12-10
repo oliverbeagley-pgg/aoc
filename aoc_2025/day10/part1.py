@@ -15,9 +15,8 @@ def parse_line(line: str) -> tuple[int, list[int], list[int]]:
     _lights, rest = line.split(" ", 1)
     _buttons, _joltage = rest.rsplit(" ", 1)
 
-    lights = int(
-        "".join("1" if char == "#" else "0" for char in reversed(_lights.strip("[]"))),
-        2,
+    lights = sum(
+        1 << idx for idx, char in enumerate(_lights.strip("[]")) if char == "#"
     )
     buttons = [
         sum(1 << int(num) for num in button.strip("()").split(","))
@@ -29,10 +28,8 @@ def parse_line(line: str) -> tuple[int, list[int], list[int]]:
 
 
 def bfs_buttons(buttons: list[int]) -> Generator[list[int]]:
-    buttons_count = len(buttons)
-
     yield from chain.from_iterable(
-        combinations(buttons, num) for num in range(1, buttons_count + 1)
+        combinations(buttons, num) for num in range(1, len(buttons) + 1)
     )
 
 
