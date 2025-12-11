@@ -13,18 +13,11 @@ def compute(puzzle_input: str) -> int:
         for root, child_s in (line.split(": ") for line in puzzle_input.splitlines())
     }
 
-    visited = set()
-
-    # Using cache to be lazy and not track if a node previously visited will result in a
-    # valid path
     @cache
     def dfs(node: str) -> int:
         if node == "out":
             return 1
-        # Prevent cycles
-        if node in visited:
-            return 0
-        visited.add(node)
+
         return sum(dfs(child) for child in graph[node])
 
     return dfs("you")

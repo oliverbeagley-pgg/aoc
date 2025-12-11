@@ -1,5 +1,9 @@
 import argparse
 from functools import cache
+from functools import reduce
+from itertools import pairwise
+from itertools import permutations
+from operator import mul
 from pathlib import Path
 
 import pytest
@@ -13,41 +17,17 @@ def compute(puzzle_input: str) -> int:
         for root, child_s in (line.split(": ") for line in puzzle_input.splitlines())
     }
 
-    visited = set()
-
-    # Using cache to be lazy and not track if a node previously visited will result in a
-    # valid path
     @cache
-    def dfs(node: str, dest: str, skip: str | None = None) -> int:
+    def dfs(node: str, dest: str) -> int:
         if node == dest:
             return 1
-        # for cases where destination is not out
-        if node == "out":
-            return 0
-        # do not allow transiting via skip node
-        if skip is not None and node == skip:
-            return 0
-        # Prevent cycles
-        if node in visited:
-            return 0
-        visited.add(node)
-        return sum(dfs(child, dest, skip) for child in graph[node])
 
-    visited.clear()
-    segment_1 = dfs("svr", "fft", "dac")
-    visited.clear()
-    segment_2 = dfs("fft", "dac")
-    visited.clear()
-    segment_3 = dfs("dac", "out")
+        return sum(dfs(child, dest) for child in graph.get(node, []))
 
-    visited.clear()
-    segment_4 = dfs("svr", "dac", "fft")
-    visited.clear()
-    segment_5 = dfs("dac", "fft")
-    visited.clear()
-    segment_6 = dfs("fft", "out")
-
-    return (segment_1 * segment_2 * segment_3) + (segment_4 * segment_5 * segment_6)
+    return sum(
+        reduce(mul, (dfs(a, b) for a, b in pairwise(path)))
+        for path in (["svr", *order, "out"] for order in permutations(["fft", "dac"]))
+    )
 
 
 TEST_INPUT = """\
